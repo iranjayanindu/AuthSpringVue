@@ -1,26 +1,21 @@
 package com.lk.veu.test.auth.controller;
 
 import com.lk.veu.test.auth.model.User;
-import com.lk.veu.test.auth.repository.UserRepository;
+import com.lk.veu.test.auth.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class AuthController {
+    private final AuthService authService;
 
-    private final UserRepository userRepository;
 
-    public AuthController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
-    @GetMapping("/hello")
-    public String hello(){
-        return " Hello! ";
-    }
-
-    @PostMapping("/singup")
-    public User singup(@RequestBody User user){
-        return userRepository.save(user);
+    @PostMapping("/signup")
+    public User signup(@RequestBody User user){
+        return authService.signup(user);
     }
 }
