@@ -1,5 +1,6 @@
 package com.lk.veu.test.auth.service.impl;
 
+import com.lk.veu.test.auth.config.Token;
 import com.lk.veu.test.auth.model.User;
 import com.lk.veu.test.auth.repository.UserRepository;
 import com.lk.veu.test.auth.service.AuthService;
@@ -29,14 +30,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Optional<User> login(String email, String password) {
+    public Token login(String email, String password) {
         Optional<User> userbyEmail = userRepository.findByEmail(email);
-        System.out.println("user : "+userbyEmail.get().getEmail());
         if (userbyEmail.isEmpty())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"invalid credentials");
 
         if(!passwordEncoder.matches(password, userbyEmail.get().getPassword()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"invalid credentials");
-        return userbyEmail;
+        return Token.of(userbyEmail.get().getId(),10L,"very_long_and secure_and_safe_key");
     }
 }

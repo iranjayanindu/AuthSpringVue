@@ -22,11 +22,11 @@ public class AuthController {
     }
 
     record LoginRequest(String email, String password){}
-    record LoginResponse(Long id,String firstName,String lastName,String email){}
+    record LoginResponse(String token){}
 
     @PostMapping("/signin")
     public LoginResponse signin(@RequestBody LoginRequest loginRequest){
-        Optional<User> login = authService.login(loginRequest.email(), loginRequest.password());
-        return new LoginResponse(login.get().getId(), login.get().getFirstName(), login.get().getLastName(), login.get().getEmail());
+        var token = authService.login(loginRequest.email(), loginRequest.password());
+        return new LoginResponse(token.getToken());
     }
 }
